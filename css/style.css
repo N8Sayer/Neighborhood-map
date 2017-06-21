@@ -1,0 +1,57 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#map {
+  height: 100%;
+  overflow: visible;
+}
+
+.menu {
+  display: inline-block;
+  position: fixed;
+  z-index: 1;
+  width: 20vw;
+  max-width: 175px;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  background-color: grey;
+  border: 1px solid black;
+}
+
+#toggle {
+  display: block;
+  position: fixed;
+  font-size: 20px;
+  top: 1px;
+  right: 1px;
+  border: none;
+  background: none;
+}
+
+#toggle:hover {
+  background-color: lightgrey;
+  border: 1px solid black;
+}
+
+ul {
+  list-style-type: none;
+}
+
+li {
+  padding: 0;
+  margin: 10px;
+  text-align: left;
+  font-size: 20px;
+  border: 2px solid black;
+  width: 100%;
+}
+
+input {
+  max-width: 85%;
+  margin: 5%;
+  content-align: center;
+}
