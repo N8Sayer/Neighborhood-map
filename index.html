@@ -11,7 +11,7 @@
   <body>
 
     <div class='menu' data-bind='visible: visibleMenu'>
-      <p data-bind="text: title"></p>
+      <h2 id='title' data-bind="text: title"></h2>
       <div class='header filter'>
         <input type='text'>
       </div>
@@ -24,7 +24,7 @@
     <button data-bind='click: toggleMenu' id='toggle'>&#x2630;</button>
     <br><br>
     <div id='map'><div>
-<!-- Flickr API Key:aa39c6ad485c236eb611bed796fd88ee Secret:55efecf1a0524e02 -->
+
     <script src='js/map.js'></script>
     <script src='js/menu.js'></script>
     <script async defer

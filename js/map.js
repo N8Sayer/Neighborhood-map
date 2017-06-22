@@ -26,7 +26,7 @@ var map,
         title: 'Arvest Bank Theatre at the Midland',
         type: 'entertainment',
         subtype: 'music',
-        description: 'One of the best large venues in town. Building was beautifully restored'
+        description: 'One of the best large venues in town after the building was beautifully restored'
       },
       {
         position: {lat: 39.097304, lng: -94.579950},
@@ -52,8 +52,7 @@ var map,
     ];
 
 function initMarkers(editMarkers) {
-  var mapMarkers = [],
-      largeInfoWindow = new google.maps.InfoWindow();
+  var largeInfoWindow = new google.maps.InfoWindow();
 
   for (var x=0; x<editMarkers.length;x++) {
     var marker = new google.maps.Marker({
@@ -66,9 +65,11 @@ function initMarkers(editMarkers) {
     marker.setMap(map);
 
     marker.addListener('click', function() {
-      populateInfoWindow(this, largeInfoWindow);
+      marker = populateInfoWindow(this, largeInfoWindow);
     });
-    mapMarkers.push(marker);
+    // markers[x].addListener('click', function() {
+    //   populateInfoWindow(this, largeInfoWindow);
+    // });
   }
 }
 
@@ -79,9 +80,6 @@ function initMap() {
   });
 
   initMarkers(markers);
-
-
-
 }
 
 function capitalFirst (string) {
@@ -89,18 +87,54 @@ function capitalFirst (string) {
 }
 
 function populateInfoWindow(marker, infowindow) {
-  // Significant sections of this function were borrowed from Project_Code_13_DevilInTheDetails
+  // Sections of this function were borrowed from Project_Code_13_DevilInTheDetails
   // to ensure full functionality and error-proofing
   if (infowindow.marker != marker) {
     infowindow.marker = marker;
-    infowindow.setContent('<h3>'+ marker.title +'</h3>' +
-      '<i>'+ capitalFirst(marker.type) +' - '+ capitalFirst(marker.subtype) +'</i>' +
-      '<p>' + marker.description +'</p>');
+
+    if (!marker.image) {
+      var flickrURL = 'https://api.flickr.com/services/rest';
+      flickrURL += '?' + $.param({
+        method: 'flickr.photos.search',
+        api_key: 'aa39c6ad485c236eb611bed796fd88ee',
+        text: marker.title + ' Kansas City',
+        safe_search: 1,
+        per_page: 5,
+        format: 'json',
+        jsoncallback: 'apiResult'
+      });
+
+      $.ajax ({
+        url: flickrURL,
+        dataType: 'jsonp',
+        jsonp: 'jsoncallback'
+      }).done(function(result) {
+        var photo = result.photos.photo[0];
+        var picURL = 'https://farm' + photo.farm + '.staticflickr.com/' +
+        photo.server + '/' + photo.id + '_' + photo.secret + '.jpg';
+        marker.image = picURL;
+
+        // Fill the infoWindow with content
+        infowindow.setContent('<div id="info-window"><h3>'+ marker.title +'</h3>'+
+        '<i>'+ capitalFirst(marker.type) +' - '+ capitalFirst(marker.subtype) +'</i>'+
+        '<br>'+'<img src='+ marker.image +'><p>' + marker.description +'</p></div>');
+      }).fail(function() {
+        console.log('No Flickr Imagery loaded');
+      });
+    }
+
+    // Fill the infoWindow with content
+    infowindow.setContent('<div id="info-window"><h3>'+ marker.title +'</h3>'+
+    '<i>'+ capitalFirst(marker.type) +' - '+ capitalFirst(marker.subtype) +'</i>'+
+    '<br>'+'<img src='+ marker.image +'><p>' + marker.description +'</p></div>');
+
     // Make sure the marker property is cleared if the infowindow is closed.
     infowindow.addListener('closeclick', function() {
       infowindow.marker = null;
     });
     // Open the infowindow on the correct marker.
     infowindow.open(map, marker);
+
+    return marker;
   }
 }
