@@ -5,7 +5,7 @@ var map,
         title: 'Kaldi\'s Coffee',
         type: 'food/drink',
         subtype: 'coffee/tea',
-        description: 'A local coffee shop with excellent Matcha Latte\'s'
+        description: 'A local coffee shop with excellent Matcha Lattes'
       },
       {
         position: {lat: 39.098422, lng: -94.581912},
@@ -26,7 +26,7 @@ var map,
         title: 'Arvest Bank Theatre at the Midland',
         type: 'entertainment',
         subtype: 'music',
-        description: 'One of the best large venues in town after the building was beautifully restored'
+        description: 'One of the best music venues in town after the building was beautifully restored'
       },
       {
         position: {lat: 39.097304, lng: -94.579950},
@@ -60,16 +60,16 @@ function initMarkers(editMarkers) {
       title: editMarkers[x].title,
       type: editMarkers[x].type,
       subtype: editMarkers[x].subtype,
-      description: editMarkers[x].description
+      description: editMarkers[x].description,
     });
     marker.setMap(map);
 
     marker.addListener('click', function() {
       marker = populateInfoWindow(this, largeInfoWindow);
+      if (marker.icon == undefined) {
+        marker.setIcon('https://www.google.com/mapfiles/marker_green.png');
+      }
     });
-    // markers[x].addListener('click', function() {
-    //   populateInfoWindow(this, largeInfoWindow);
-    // });
   }
 }
 
@@ -91,6 +91,9 @@ function populateInfoWindow(marker, infowindow) {
   // to ensure full functionality and error-proofing
   if (infowindow.marker != marker) {
     infowindow.marker = marker;
+
+    infowindow.setContent('<div id="info-window"><h2></h2><i>'+
+    '</i><img><p></p></div>');
 
     if (!marker.image) {
       var flickrURL = 'https://api.flickr.com/services/rest';
@@ -115,18 +118,19 @@ function populateInfoWindow(marker, infowindow) {
         marker.image = picURL;
 
         // Fill the infoWindow with content
-        infowindow.setContent('<div id="info-window"><h3>'+ marker.title +'</h3>'+
+        infowindow.setContent('<div id="info-window"><h2>'+ marker.title +'</h2>'+
         '<i>'+ capitalFirst(marker.type) +' - '+ capitalFirst(marker.subtype) +'</i>'+
-        '<br>'+'<img src='+ marker.image +'><p>' + marker.description +'</p></div>');
+        '<img src='+ marker.image +'><p>' + marker.description +'</p></div>');
       }).fail(function() {
         console.log('No Flickr Imagery loaded');
       });
     }
-
-    // Fill the infoWindow with content
-    infowindow.setContent('<div id="info-window"><h3>'+ marker.title +'</h3>'+
-    '<i>'+ capitalFirst(marker.type) +' - '+ capitalFirst(marker.subtype) +'</i>'+
-    '<br>'+'<img src='+ marker.image +'><p>' + marker.description +'</p></div>');
+    else {
+      // Fill the infoWindow with content
+      infowindow.setContent('<div id="info-window"><h2>'+ marker.title +'</h2>'+
+      '<i>'+ capitalFirst(marker.type) +' - '+ capitalFirst(marker.subtype) +'</i>'+
+      '<img src='+ marker.image +'><p>' + marker.description +'</p></div>');
+    }
 
     // Make sure the marker property is cleared if the infowindow is closed.
     infowindow.addListener('closeclick', function() {

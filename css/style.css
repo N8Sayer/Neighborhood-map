@@ -17,9 +17,15 @@ html, body {
 #info-window {
   max-width: 300px;
 }
+
 #info-window img {
   max-width: 75%;
-  max-height: 60%;
+  max-height: 200px;
+  padding: 10px 10px 10px 0px;
+}
+
+#info-window i,p {
+  font-size: 15px;
 }
 
 .menu {
@@ -59,7 +65,7 @@ ul {
 li {
   padding: 10px 5px 10px 5px;
   justify-content: left;
-  font-size: 20px;
+  font-size: 19px;
   border-bottom: 1px solid lightgrey;
   max-width: 100%;
 }
@@ -67,7 +73,7 @@ li {
 li:hover {
   background-color: orange;
   cursor: pointer;
-  color: grey;
+  font-weight: bold;
 }
 
 li:first-child {
