@@ -13,12 +13,19 @@
     <div class='menu' data-bind='visible: visibleMenu'>
       <h2 id='title' data-bind="text: title"></h2>
       <div class='header filter'>
-        <input type='text'>
+        <select data-bind='options: filter, value: filterSelection'></select>
       </div>
       <div class='header list'>
-        <ul data-bind='foreach: list'>
+        <ul data-bind='foreach: list, visible: filterSelection()=="All"'>
           <li data-bind='text: title'></li>
         </ul>
+        <ul data-bind='foreach: fooddrink, visible: filterSelection()=="Food/Drink"'>
+          <li data-bind='text: title'></li>
+        </ul>
+        <ul data-bind='foreach: entertainment, visible: filterSelection()=="Entertainment"'>
+          <li data-bind='text: title'></li>
+        </ul>
+        <div data-bind='text: console.log()'></div>
       </div>
     </div>
     <button data-bind='click: toggleMenu' id='toggle'>&#x2630;</button>
