@@ -1,5 +1,6 @@
 
-var markers = [
+var model = function() {
+  var markers = ko.observableArray([
   {
     position: {lat: 39.099784, lng:-94.583006},
     title: 'Kaldi\'s Coffee',
@@ -49,31 +50,16 @@ var markers = [
     subtype: 'theater',
     description: 'An excellent small stage for theatrical productions'
   }
-];
-
-var view = function() {
-
-};
+]);
 
 var viewModel = function() {
   var self = this;
   this.visibleMenu = ko.observable(true);
   this.filterSelection = ko.observable('All');
-  this.entertainment = ko.observableArray();
-  this.fooddrink = ko.observableArray();
 
-  this.list = ko.observableArray(markers);
+  this.list = ko.observableArray(model.markers());
   this.title = ko.observable('My Favorite Places');
   this.filter = ko.observableArray(['All','Food/Drink','Entertainment']);
-
-  for (var x=0; x<self.list().length;x++) {
-    if (self.list()[x].type == 'Food/Drink') {
-      self.fooddrink.push(self.list()[x]);
-    }
-    else if (self.list()[x].type == 'Entertainment') {
-      self.entertainment.push(self.list()[x]);
-    }
-  }
 
   this.toggleMenu = function() {
     self.visibleMenu(!self.visibleMenu());

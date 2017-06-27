@@ -16,14 +16,8 @@
         <select data-bind='options: filter, value: filterSelection'></select>
       </div>
       <div class='header list'>
-        <ul data-bind='foreach: list, visible: filterSelection()=="All"'>
-          <li data-bind='text: title'></li>
-        </ul>
-        <ul data-bind='foreach: fooddrink, visible: filterSelection()=="Food/Drink"'>
-          <li data-bind='text: title'></li>
-        </ul>
-        <ul data-bind='foreach: entertainment, visible: filterSelection()=="Entertainment"'>
-          <li data-bind='text: title'></li>
+        <ul data-bind='foreach: list'>
+          <li data-bind='text: title, visible: $data.type==filterSelection()'></li>
         </ul>
         <div data-bind='text: console.log()'></div>
       </div>
