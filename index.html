@@ -16,24 +16,20 @@
         <select data-bind='options: filter, value: filterSelection'></select>
       </div>
       <div class='header list'>
-        <ul data-bind='foreach: list, visible: filterSelection()=="All"'>
-          <li data-bind='text: title'></li>
+        <ul data-bind='foreach: list()'>
+          <li data-bind='text: title,
+                         visible: $data.type == $parent.filterSelection()
+                         || $parent.filterSelection() == "All",
+                         event: {click: $parent.click}'</li>
         </ul>
-        <ul data-bind='foreach: fooddrink, visible: filterSelection()=="Food/Drink"'>
-          <li data-bind='text: title'></li>
-        </ul>
-        <ul data-bind='foreach: entertainment, visible: filterSelection()=="Entertainment"'>
-          <li data-bind='text: title'></li>
-        </ul>
-        <div data-bind='text: console.log()'></div>
       </div>
     </div>
     <button data-bind='click: toggleMenu' id='toggle'>&#x2630;</button>
     <br><br>
     <div id='map'><div>
 
-    <script src='js/map.js'></script>
     <script src='js/menu.js'></script>
+    <script src='js/map.js'></script>
     <script async defer
         src=
         "https://maps.googleapis.com/maps/api/js?key=AIzaSyBkEo0oLj80yFQyOWf8ixoBkawq4yMIAEY&v=3&callback=initMap">

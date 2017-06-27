@@ -1,7 +1,8 @@
 var map;
 
-function initMarkers(editMarkers) {
-  var largeInfoWindow = new google.maps.InfoWindow();
+// Initialize the markers and bind a listener to control the infoWindow.
+function initMarkers() {
+  var editMarkers = markers;
 
   for (var x=0; x<editMarkers.length;x++) {
     var marker = new google.maps.Marker({
@@ -9,9 +10,11 @@ function initMarkers(editMarkers) {
       title: editMarkers[x].title,
       type: editMarkers[x].type,
       subtype: editMarkers[x].subtype,
-      description: editMarkers[x].description,
+      description: editMarkers[x].description
     });
     marker.setMap(map);
+    // Save the completed Google marker back into a variable in the markers array for later reference
+    markers[x].marker = marker;
 
     marker.addListener('click', function() {
       marker = populateInfoWindow(this, largeInfoWindow);
@@ -22,19 +25,19 @@ function initMarkers(editMarkers) {
   }
 }
 
+// Open up the map with initial coords and zoom level. Intialize global infoWindow.
 function initMap() {
+  window.largeInfoWindow = new google.maps.InfoWindow();
+
   map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: 39.0985662, lng: -94.5828433},
     zoom: 18
   });
 
-  initMarkers(markers);
+  initMarkers();
 }
 
-function capitalFirst (string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
+// Fill the infoWindow with content, with error handling for flickr API
 function populateInfoWindow(marker, infowindow) {
   // Sections of this function were borrowed from Project_Code_13_DevilInTheDetails
   // to ensure full functionality and help with error-proofing
@@ -68,18 +71,18 @@ function populateInfoWindow(marker, infowindow) {
 
         // Fill the infoWindow with content
         infowindow.setContent('<div id="info-window"><h2>'+ marker.title +'</h2>'+
-        '<i>'+ marker.type +' - '+ capitalFirst(marker.subtype) +'</i>'+
+        '<i>'+ marker.type +' - '+ marker.subtype +'</i>'+
         '<img src='+ marker.image +'><p>' + marker.description +'</p></div>');
       }).fail(function() {
         infowindow.setContent('<div id="info-window"><h2>'+ marker.title +'</h2>'+
-        '<i>'+ marker.type +' - '+ capitalFirst(marker.subtype) +'</i>'+
+        '<i>'+ marker.type +' - '+ marker.subtype +'</i>'+
         '<p>No Flickr Imagery Loaded</p><p>' + marker.description +'</p></div>');
       });
     }
     else {
       // Fill the infoWindow with content
       infowindow.setContent('<div id="info-window"><h2>'+ marker.title +'</h2>'+
-      '<i>'+ marker.type +' - '+ capitalFirst(marker.subtype) +'</i>'+
+      '<i>'+ marker.type +' - '+ marker.subtype +'</i>'+
       '<img src='+ marker.image +'><p>' + marker.description +'</p></div>');
     }
 
@@ -90,6 +93,6 @@ function populateInfoWindow(marker, infowindow) {
     // Open the infowindow on the correct marker.
     infowindow.open(map, marker);
 
-    return marker;
   }
+  return marker;
 }
