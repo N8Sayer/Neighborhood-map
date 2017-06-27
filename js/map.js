@@ -1,14 +1,5 @@
 var map;
 
-function initMap() {
-  map = new google.maps.Map(document.getElementById('map'), {
-    center: {lat: 39.0985662, lng: -94.5828433},
-    zoom: 18
-  });
-
-  initMarkers(markers);
-}
-
 function initMarkers(editMarkers) {
   var largeInfoWindow = new google.maps.InfoWindow();
 
@@ -31,6 +22,18 @@ function initMarkers(editMarkers) {
   }
 }
 
+function initMap() {
+  map = new google.maps.Map(document.getElementById('map'), {
+    center: {lat: 39.0985662, lng: -94.5828433},
+    zoom: 18
+  });
+
+  initMarkers(markers);
+}
+
+function capitalFirst (string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
 
 function populateInfoWindow(marker, infowindow) {
   // Sections of this function were borrowed from Project_Code_13_DevilInTheDetails
@@ -87,10 +90,6 @@ function populateInfoWindow(marker, infowindow) {
     // Open the infowindow on the correct marker.
     infowindow.open(map, marker);
 
+    return marker;
   }
-  return marker;
-}
-
-function capitalFirst (string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
 }
