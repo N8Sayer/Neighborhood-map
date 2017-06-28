@@ -18,7 +18,7 @@ function initMarkers() {
 
     marker.addListener('click', function() {
       marker = populateInfoWindow(this, largeInfoWindow);
-      if (marker.icon == undefined) {
+      if (marker.icon === undefined) {
         marker.setIcon('https://www.google.com/mapfiles/marker_green.png');
       }
     });
