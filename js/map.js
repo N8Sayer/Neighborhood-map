@@ -13,15 +13,10 @@ function initMarkers() {
       description: editMarkers[x].description
     });
     marker.setMap(map);
+
+    marker.addListener('click',clickMarkers);
     // Save the completed Google marker back into a variable in the markers array for later reference
     markers[x].marker = marker;
-
-    marker.addListener('click', function() {
-      marker = populateInfoWindow(this, largeInfoWindow);
-      if (marker.icon === undefined) {
-        marker.setIcon('https://www.google.com/mapfiles/marker_green.png');
-      }
-    });
   }
 }
 
@@ -34,11 +29,21 @@ function initMap() {
     zoom: 18
   });
 
+
+
   initMarkers();
+}
+
+function clickMarkers() {
+  populateInfoWindow(this, largeInfoWindow);
+    if (this.icon === undefined) {
+      this.setIcon('https://www.google.com/mapfiles/marker_green.png');
+    }
 }
 
 // Fill the infoWindow with content, with error handling for flickr API
 function populateInfoWindow(marker, infowindow) {
+
   // Sections of this function were borrowed from Project_Code_13_DevilInTheDetails
   // to ensure full functionality and help with error-proofing
   if (infowindow.marker != marker) {
