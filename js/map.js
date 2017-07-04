@@ -20,7 +20,7 @@ function initMap() {
 // Initialize the markers and bind a listener to control the infoWindow,
 // then apply filters on further runs.
 function initMarkers(filter) {
-  if (filter == null) {
+  if (filter === null) {
     for (var x=0; x<markers.length; x++) {
       var marker = new google.maps.Marker({
         position: markers[x].position,
@@ -42,13 +42,13 @@ function initMarkers(filter) {
   }
   else {
     var editMarkers = [];
-    for (var x=0; x<markers.length; x++) {
+    for (x=0; x<markers.length; x++) {
       if (markers[x].type == filter) {
         editMarkers.push(markers[x]);
       }
     }
 
-    for (var x=0; x<markers.length; x++) {
+    for (x=0; x<markers.length; x++) {
       var filterBool = false;
       for (var y=0; y<editMarkers.length; y++) {
         if (editMarkers[y].title == markers[x].title) {
