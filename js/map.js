@@ -36,8 +36,8 @@ function initMarkers(filter) {
     }
   }
   else if (filter == 'All') {
-    for (var x=0; x<markers.length; x++) {
-      markers[x].marker.setMap(map);
+    for (var c=0; c<markers.length; c++) {
+      markers[c].marker.setMap(map);
     }
   }
   else {
