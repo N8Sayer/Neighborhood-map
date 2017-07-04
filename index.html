@@ -11,7 +11,9 @@
     <aside class='menu' data-bind='visible: visibleMenu'>
       <h2 id='title' data-bind="text: title"></h2>
       <div class='header filter'>
-        <select id='filter' data-bind='options: filter, value: filterSelection'></select>
+        <select id='filter' data-bind='options: filter,
+                                       value: filterSelection,
+                                       event: {change: function() {initMarkers(filterSelection())}}'></select>
       </div>
       <div class='header list'>
         <ul data-bind='foreach: list()'>

@@ -10,9 +10,9 @@ function initMap() {
   });
 
   // On changes to the filterSelection variable, rerun the marker setter
-  $('#filter').change(function(filter) {
-    initMarkers(filter.target.value);
-  });
+  // $('#filter').on('change', function(filter) {
+  //   initMarkers(filter.target.value);
+  // });
 
   initMarkers();
 }
@@ -20,6 +20,7 @@ function initMap() {
 // Initialize the markers and bind a listener to control the infoWindow,
 // then apply filters on further runs.
 function initMarkers(filter) {
+  console.log(filter);
   if (filter === null || filter === undefined) {
     for (var x=0; x<markers.length; x++) {
       var marker = new google.maps.Marker({
@@ -37,7 +38,7 @@ function initMarkers(filter) {
   }
   else if (filter == 'All') {
     for (var c=0; c<markers.length; c++) {
-      markers[c].marker.setMap(map);
+      markers[c].marker.setVisible(true);
     }
   }
   else {
@@ -52,12 +53,12 @@ function initMarkers(filter) {
       var filterBool = false;
       for (var b=0; b<editMarkers.length; b++) {
         if (editMarkers[b].title == markers[a].title) {
-          markers[a].marker.setMap(map);
+          markers[a].marker.setVisible(true);
           filterBool = true;
         }
       }
       if (!filterBool) {
-        markers[a].marker.setMap(null);
+        markers[a].marker.setVisible(false);
       }
     }
   }
@@ -100,7 +101,6 @@ function populateInfoWindow(marker, infowindow) {
         dataType: 'jsonp',
         jsonp: 'jsoncallback'
       }).done(function(result) {
-        console.log(result);
         var photo = result.photos.photo[0];
 
         marker.image = 'https://farm' + photo.farm + '.staticflickr.com/' +

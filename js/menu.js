@@ -82,7 +82,6 @@ var ViewModel = function() {
     }
   };
 
-
   // As titled, toggles the menu by changing the visibleMenu variable.
   this.toggleMenu = function() {
     self.visibleMenu(!self.visibleMenu());
