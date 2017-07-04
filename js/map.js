@@ -20,7 +20,7 @@ function initMap() {
 // Initialize the markers and bind a listener to control the infoWindow,
 // then apply filters on further runs.
 function initMarkers(filter) {
-  if (filter === null) {
+  if (filter === null || filter === undefined) {
     for (var x=0; x<markers.length; x++) {
       var marker = new google.maps.Marker({
         position: markers[x].position,
