@@ -42,22 +42,22 @@ function initMarkers(filter) {
   }
   else {
     var editMarkers = [];
-    for (x=0; x<markers.length; x++) {
-      if (markers[x].type == filter) {
-        editMarkers.push(markers[x]);
+    for (var y=0; y<markers.length; y++) {
+      if (markers[y].type == filter) {
+        editMarkers.push(markers[y]);
       }
     }
 
-    for (x=0; x<markers.length; x++) {
+    for (var a=0; a<markers.length; a++) {
       var filterBool = false;
-      for (var y=0; y<editMarkers.length; y++) {
-        if (editMarkers[y].title == markers[x].title) {
-          markers[x].marker.setMap(map);
+      for (var b=0; b<editMarkers.length; b++) {
+        if (editMarkers[b].title == markers[a].title) {
+          markers[a].marker.setMap(map);
           filterBool = true;
         }
       }
       if (!filterBool) {
-        markers[x].marker.setMap(null);
+        markers[a].marker.setMap(null);
       }
     }
   }
