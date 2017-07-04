@@ -51,7 +51,7 @@ var markers = [
     }
   ];
 
-var viewModel = function() {
+var ViewModel = function() {
   var self = this;
 
   // This variable controls the toggle for the menu
@@ -71,16 +71,17 @@ var viewModel = function() {
 
   // This function controls the infoWindow content from the menus
   this.click = function(Marker) {
-    if (largeInfoWindow.marker == Marker.marker) {
-      largeInfoWindow.close();
-    }
-    else {
-      populateInfoWindow(Marker.marker, largeInfoWindow);
-      if (Marker.marker.icon == undefined) {
-        Marker.marker.setIcon('https://www.google.com/mapfiles/marker_green.png');
-      }
+    markers.forEach(function(object) {
+      object.marker.setIcon(null);
+    });
+
+    populateInfoWindow(Marker.marker, largeInfoWindow);
+    map.panTo(Marker.marker.getPosition());
+    if (Marker.marker.icon === null) {
+      Marker.marker.setIcon('https://www.google.com/mapfiles/marker_green.png');
     }
   };
+
 
   // As titled, toggles the menu by changing the visibleMenu variable.
   this.toggleMenu = function() {
@@ -88,4 +89,4 @@ var viewModel = function() {
   };
 };
 
-ko.applyBindings(new viewModel());
+ko.applyBindings(new ViewModel());

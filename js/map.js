@@ -1,57 +1,88 @@
 var map;
 
-// Initialize the markers and bind a listener to control the infoWindow.
-function initMarkers() {
-  var editMarkers = markers;
-
-  for (var x=0; x<editMarkers.length;x++) {
-    var marker = new google.maps.Marker({
-      position: editMarkers[x].position,
-      title: editMarkers[x].title,
-      type: editMarkers[x].type,
-      subtype: editMarkers[x].subtype,
-      description: editMarkers[x].description
-    });
-    marker.setMap(map);
-
-    marker.addListener('click',clickMarkers);
-    // Save the completed Google marker back into a variable in the markers array for later reference
-    markers[x].marker = marker;
-  }
-}
-
 // Open up the map with initial coords and zoom level. Intialize global infoWindow.
 function initMap() {
   window.largeInfoWindow = new google.maps.InfoWindow();
 
   map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: 39.0985662, lng: -94.5828433},
-    zoom: 18
+    zoom: 17
   });
 
-
+  // On changes to the filterSelection variable, rerun the marker setter
+  $('#filter').change(function(filter) {
+    initMarkers(filter.target.value);
+  });
 
   initMarkers();
 }
 
-function clickMarkers() {
-  populateInfoWindow(this, largeInfoWindow);
-    if (this.icon === undefined) {
-      this.setIcon('https://www.google.com/mapfiles/marker_green.png');
+// Initialize the markers and bind a listener to control the infoWindow,
+// then apply filters on further runs.
+function initMarkers(filter) {
+  if (filter == null) {
+    for (var x=0; x<markers.length; x++) {
+      var marker = new google.maps.Marker({
+        position: markers[x].position,
+        title: markers[x].title,
+        type: markers[x].type,
+        subtype: markers[x].subtype,
+        description: markers[x].description
+      });
+      marker.setMap(map);
+      markers[x].marker = marker;
+
+      marker.addListener('click',clickMarkers);
     }
+  }
+  else if (filter == 'All') {
+    for (var x=0; x<markers.length; x++) {
+      markers[x].marker.setMap(map);
+    }
+  }
+  else {
+    var editMarkers = [];
+    for (var x=0; x<markers.length; x++) {
+      if (markers[x].type == filter) {
+        editMarkers.push(markers[x]);
+      }
+    }
+
+    for (var x=0; x<markers.length; x++) {
+      var filterBool = false;
+      for (var y=0; y<editMarkers.length; y++) {
+        if (editMarkers[y].title == markers[x].title) {
+          markers[x].marker.setMap(map);
+          filterBool = true;
+        }
+      }
+      if (!filterBool) {
+        markers[x].marker.setMap(null);
+      }
+    }
+  }
+}
+
+function clickMarkers() {
+  markers.forEach(function(object) {
+    object.marker.setIcon(null);
+  });
+
+  populateInfoWindow(this, largeInfoWindow);
+  map.panTo(this.getPosition());
+  if (this.icon === null) {
+    this.setIcon('https://www.google.com/mapfiles/marker_green.png');
+  }
 }
 
 // Fill the infoWindow with content, with error handling for flickr API
 function populateInfoWindow(marker, infowindow) {
-
   // Sections of this function were borrowed from Project_Code_13_DevilInTheDetails
   // to ensure full functionality and help with error-proofing
   if (infowindow.marker != marker) {
     infowindow.marker = marker;
-
     infowindow.setContent('<div id="info-window"><h2></h2><i>'+
     '</i><img><p></p></div>');
-
     if (!marker.image) {
       var flickrURL = 'https://api.flickr.com/services/rest';
       flickrURL += '?' + $.param({
@@ -69,26 +100,33 @@ function populateInfoWindow(marker, infowindow) {
         dataType: 'jsonp',
         jsonp: 'jsoncallback'
       }).done(function(result) {
+        console.log(result);
         var photo = result.photos.photo[0];
-        var picURL = 'https://farm' + photo.farm + '.staticflickr.com/' +
+
+        marker.image = 'https://farm' + photo.farm + '.staticflickr.com/' +
         photo.server + '/' + photo.id + '_' + photo.secret + '.jpg';
-        marker.image = picURL;
+
+        marker.attr = '';
+
 
         // Fill the infoWindow with content
         infowindow.setContent('<div id="info-window"><h2>'+ marker.title +'</h2>'+
         '<i>'+ marker.type +' - '+ marker.subtype +'</i>'+
-        '<img src='+ marker.image +'><p>' + marker.description +'</p></div>');
+        '<img src='+ marker.image +'><span>'+ marker.attr +'</span><p>' +
+        marker.description +'</p></div>');
       }).fail(function() {
         infowindow.setContent('<div id="info-window"><h2>'+ marker.title +'</h2>'+
         '<i>'+ marker.type +' - '+ marker.subtype +'</i>'+
         '<p>No Flickr Imagery Loaded</p><p>' + marker.description +'</p></div>');
+        console.log('fail');
       });
     }
     else {
       // Fill the infoWindow with content
       infowindow.setContent('<div id="info-window"><h2>'+ marker.title +'</h2>'+
       '<i>'+ marker.type +' - '+ marker.subtype +'</i>'+
-      '<img src='+ marker.image +'><p>' + marker.description +'</p></div>');
+      '<img src='+ marker.image +'><span>'+ marker.attr +'</span><p>' +
+      marker.description +'</p></div>');
     }
 
     // Make sure the marker property is cleared if the infowindow is closed.
@@ -99,5 +137,8 @@ function populateInfoWindow(marker, infowindow) {
     infowindow.open(map, marker);
 
   }
-  return marker;
+}
+
+function mapError() {
+  $('#map').html('Google Maps failed to load');
 }

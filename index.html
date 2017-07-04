@@ -1,19 +1,17 @@
 <!DOCTYPE html>
 <html>
   <head>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="utf-8">
     <title>Neighborhood Map</title>
     <link rel='stylesheet' href='css/style.css'>
-    <script src='js/knockout-3.4.2.js'></script>
-    <script src='js/jquery-3.2.1.min.js'></script>
   </head>
   <body>
 
-    <div class='menu' data-bind='visible: visibleMenu'>
+    <aside class='menu' data-bind='visible: visibleMenu'>
       <h2 id='title' data-bind="text: title"></h2>
       <div class='header filter'>
-        <select data-bind='options: filter, value: filterSelection'></select>
+        <select id='filter' data-bind='options: filter, value: filterSelection'></select>
       </div>
       <div class='header list'>
         <ul data-bind='foreach: list()'>
@@ -23,16 +21,18 @@
                          event: {click: $parent.click}'</li>
         </ul>
       </div>
-    </div>
+    </aside>
     <button data-bind='click: toggleMenu' id='toggle'>&#x2630;</button>
     <br><br>
-    <div id='map'><div>
+    <main id='map'><main>
 
-    <script src='js/menu.js'></script>
+    <script src='js/knockout-3.4.2.js'></script>
+    <script src='js/jquery-3.2.1.min.js'></script>
     <script src='js/map.js'></script>
+    <script src='js/menu.js'></script>
     <script async defer
-        src=
-        "https://maps.googleapis.com/maps/api/js?key=AIzaSyBkEo0oLj80yFQyOWf8ixoBkawq4yMIAEY&v=3&callback=initMap">
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBkEo0oLj80yFQyOWf8ixoBkawq4yMIAEY&v=3&callback=initMap"
+        onerror="mapError()">
     </script>
   </body>
 </html>
